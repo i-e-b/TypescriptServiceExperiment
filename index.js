@@ -5,7 +5,7 @@ var svc = tss.Services.TypeScriptServicesFactory;
 
 var hostStub = {
     getCompilationSettings:function(){return "{}";},
-    log:function(string){},
+    log:function(string){console.log(string);},
 
     /** Returns a JSON-encoded value of the type: string[] */
     getScriptFileNames:function(){return JSON.stringify(['sample.ts']);},
@@ -18,22 +18,18 @@ var hostStub = {
     getLocalizedDiagnosticMessages:function(){},
     getCancellationToken:function(){},
     getCurrentDirectory:function(){},
-    getDefaultLibFilename:function(){
-        console.log("CALLED!");return "";},
+    getDefaultLibFilename:function(){},
 };
 
 var res = new svc();
 
 var lss = res.createLanguageServiceShim(hostStub);
-//console.dir(lss);
+console.dir(lss); // what you can call
+console.log('--------------------------------');
 
-var def = lss.languageService.getDefinitionAtPosition('sample.ts', 337);
-console.dir(def);
-//var srcFile = /*res*/lss.factory/* */.documentRegistry.acquireDocument(
-//        "./sample.ts",  // filename
-//        {},             // compilation settings
-//        codesnap,       // scriptSnapshot
-//        1.1,            // version
-//        false);         // isOpen
-//console.dir(srcFile);
+var lang = lss.languageService;
 
+console.dir(lang.getTypeAtPosition('sample.ts', 511)); // what type
+//console.dir(lang.getDefinitionAtPosition('sample.ts', 511)); // where def?
+
+// note: calling either of the above works ok, but calling both causes a fail.
