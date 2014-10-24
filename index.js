@@ -21,15 +21,19 @@ var hostStub = {
     getDefaultLibFilename:function(){},
 };
 
-var res = new svc();
-
-var lss = res.createLanguageServiceShim(hostStub);
-console.dir(lss); // what you can call
+// List callable stuff
+console.dir((new svc()).createLanguageServiceShim(hostStub));
 console.log('--------------------------------');
 
-var lang = lss.languageService;
+function lang() {
+    var lss = (new svc()).createLanguageServiceShim(hostStub);
 
-console.dir(lang.getTypeAtPosition('sample.ts', 511)); // what type
-//console.dir(lang.getDefinitionAtPosition('sample.ts', 511)); // where def?
+    return lss.languageService;
+}
 
-// note: calling either of the above works ok, but calling both causes a fail.
+console.time('sense');
+console.dir(lang().getTypeAtPosition('sample.ts', 511)); // what type
+console.dir(lang().getDefinitionAtPosition('sample.ts', 511)); // where def?
+//console.dir(lang().getCompletionsAtPosition('sample.ts', 517)); // omnicomplete -- not working
+console.timeEnd('sense');
+
